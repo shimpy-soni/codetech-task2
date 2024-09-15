@@ -1,0 +1,79 @@
+import statistics
+
+def get_letter_grade(average):
+    """Determine the letter grade based on the average score."""
+    if average >= 90:
+        return 'A'
+    elif average >= 80:
+        return 'B'
+    elif average >= 70:
+        return 'C'
+    elif average >= 60:
+        return 'D'
+    else:
+        return 'F'
+
+def calculate_gpa(letter_grade):
+    """Calculate GPA based on the letter grade."""
+    gpa_scale = {
+        'A': 4.0,
+        'B': 3.0,
+        'C': 2.0,
+        'D': 1.0,
+        'F': 0.0
+    }
+    return gpa_scale.get(letter_grade, 0.0)
+
+def main():
+    print("Welcome to the Student Grade Tracker!")
+    
+    # Dictionary to store grades
+    grades = {}
+
+    while True:
+        # Input subject name
+        subject = input("Enter the subject name (or type 'done' to finish): ").strip()
+        if subject.lower() == 'done':
+            break
+        
+        # Input the grades for the subject
+        grades_list = []
+        while True:
+            try:
+                grade = float(input(f"Enter a grade for {subject} (type '-1' to finish): "))
+                if grade == -1:
+                    break
+                elif 0 <= grade <= 100:
+                    grades_list.append(grade)
+                else:
+                    print("Please enter a grade between 0 and 100.")
+            except ValueError:
+                print("Invalid input. Please enter a numeric value.")
+        
+        # Store the grades for the subject
+        grades[subject] = grades_list
+
+    # Calculate and display the average grade, letter grade, and GPA
+    all_grades = [grade for subject_grades in grades.values() for grade in subject_grades]
+    
+    if all_grades:
+        average_grade = statistics.mean(all_grades)
+        letter_grade = get_letter_grade(average_grade)
+        gpa = calculate_gpa(letter_grade)
+        
+        print("\nGrade Summary:")
+        print(f"Overall Average Grade: {average_grade:.2f}")
+        print(f"Letter Grade: {letter_grade}")
+        print(f"GPA: {gpa:.2f}")
+        
+        # Display grades by subject
+        print("\nGrades by Subject:")
+        for subject, subject_grades in grades.items():
+            subject_avg = statistics.mean(subject_grades)
+            print(f"{subject}: Average Grade: {subject_avg:.2f}")
+
+    else:
+        print("No grades were entered.")
+
+if _name_ == "_main_":
+    main()
